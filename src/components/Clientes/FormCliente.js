@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { ModalContext } from "../../contexts/modal/modalContexts";
+import { ModalContext } from "../../contexts/modalContexts";
 
 const FormCliente = () => {
     const { setShowModal} = useContext(ModalContext);
@@ -11,11 +11,16 @@ const FormCliente = () => {
         telefono : '',
         email : '',
     }
-    const [cliente, setCliente] = useState({clienteDefault});
-
+    const [cliente, setCliente] = useState(clienteDefault);
+    const [mensaje, setMensaje]  = useState(null)
     const handleOnSubmit = e =>{
         e.preventDefault();
-        console.log(cliente)
+        if(cliente.nombres.trim() === '' && cliente.apellidos.trim() ==='' && cliente.email.trim() === ''){
+            setMensaje('Los nombres, apellidos y el email son obligatorios');
+            return;
+        }
+        console.log(obtenerClienteEnviar())
+        cerrarModal();
     }
 
     const handleChange = e =>{
@@ -25,12 +30,28 @@ const FormCliente = () => {
         })
     }
 
+
+
+    const limpiarForm = () =>{
+        setMensaje(null);
+        setCliente(clienteDefault);
+    }
+
     const cerrarModal = () =>{
+        limpiarForm();
         setShowModal(false);
+    }
+
+    const obtenerClienteEnviar = () => {
+        let clienteTemp = {...cliente};
+        if(clienteTemp.direccion === "") delete clienteTemp.direccion;
+        if(clienteTemp.telefono === "") delete clienteTemp.telefono;
+        return clienteTemp;
     }
 
     return (
         <form onSubmit={handleOnSubmit}>
+            {mensaje ? <div className="notification is-danger">{mensaje}</div> : null}
             <div className="field is-horizontal">
                 <div className="field-label is-normal" >
                     <label className="label">Nombre completo</label>
@@ -77,8 +98,8 @@ const FormCliente = () => {
                             <input
                                 className="input"
                                 type="text"
-                                placeholder="Direccion"
-                                name="Direccion"
+                                placeholder="direccion"
+                                name="direccion"
                                 value={cliente.direccion}
                                 onChange={handleChange}>
                             </input>
@@ -100,8 +121,8 @@ const FormCliente = () => {
                             <input
                                 className="input"
                                 type="text"
-                                placeholder="Telefono"
-                                name="Direccion"
+                                placeholder="telefono"
+                                name="telefono"
                                 value={cliente.telefono}
                                 onChange={handleChange}>
                             </input>
@@ -123,9 +144,9 @@ const FormCliente = () => {
                             <input
                                 className="input"
                                 type="text"
-                                placeholder="Direccion"
-                                name="Direccion"
-                                value={cliente.direccion}
+                                placeholder="email"
+                                name="email"
+                                value={cliente.email}
                                 onChange={handleChange}>
                             </input>
                             <span className="icon is-small is-left" >

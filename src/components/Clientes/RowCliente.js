@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import { ModalContext } from "../../contexts/modal/modalContexts";
+import { ModalContext } from "../../contexts/modalContexts";
 
 const RowCliente = ({cliente}) =>{
 
