@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import RowCliente from "./RowCliente";
+import { ClienteContext } from "../../contexts/clienteContext";
 
 
 const TableCliente = () =>{
 
+    const {clientesList, obtenerClientes} = useContext(ClienteContext);
 
-
+    useEffect(() => {
+        obtenerClientes();
+    }, []);
+    if(clientesList.length === 0) return  <center> <p>No existe clientes.</p> </center> 
     return (
         <div className="container" >
             <table className="table is-hoverable is-fullwidth" >
